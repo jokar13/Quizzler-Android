@@ -1,4 +1,4 @@
-package com.londonappbrewery.quizzler;
+package com.jokar.quizzler;
 
 import android.app.Activity;
 import android.os.Bundle;
