@@ -1,6 +1,8 @@
 package com.jokar.quizzler;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -53,12 +55,21 @@ public class MainActivity extends Activity {
         mScoreTextView = findViewById(R.id.score);
         mProgressBar=findViewById(R.id.progress_bar);
 
+
+        // Restores the 'state' of the app upon screen rotation:
+        if (savedInstanceState != null) {
+            mScore = savedInstanceState.getInt("ScoreKey");
+            mIndex = savedInstanceState.getInt("IndexKey");
+            mScoreTextView.setText("Score " + mScore + "/" + mQuestionBank.length);
+        } else {
+            mScore = 0;
+            mIndex = 0;
+        }
+
         mQuestion= mQuestionBank[mIndex].getQuestionId();
         mQuestionTextView.setText(mQuestion);
 
 
-        
-        
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,7 +83,8 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(View view) {
                 checkAnswer(false);
-               updateQuestion();
+                updateQuestion();
+                mScoreTextView.setText("Score " + mScore + "/" + mQuestionBank.length);
             }
         });
 
@@ -80,6 +92,20 @@ public class MainActivity extends Activity {
 
     private void updateQuestion(){
         mIndex=(mIndex+1) % mQuestionBank.length;
+
+        if(mIndex == 0){
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Game Over");
+            alert.setCancelable(false);
+            alert.setMessage("You scored " + mScore + " points!");
+            alert.setPositiveButton("Close application", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            alert.show();
+        }
         mQuestion=mQuestionBank[mIndex].getQuestionId();
         mQuestionTextView.setText(mQuestion);
         mProgressBar.incrementProgressBy(PROGRESS_BAR_INCREMENT);
@@ -97,6 +123,15 @@ public class MainActivity extends Activity {
 
 
 
+    }
+    // This callback is received when the screen is rotated so we can save the 'state'
+    // of the app in a 'bundle'.
+    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("ScoreKey", mScore);
+        outState.putInt("IndexKey", mIndex);
     }
 
 
