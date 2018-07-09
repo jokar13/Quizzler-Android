@@ -23,8 +23,8 @@ public class MainActivity extends Activity {
     int mScore;
 
 
-   //  TODO: Uncomment to create question bank
-    private TrueFalse[] mQuestionBank = new TrueFalse[] {
+    //  TODO: Uncomment to create question bank
+    private TrueFalse[] mQuestionBank = new TrueFalse[]{
             new TrueFalse(R.string.question_1, true),
             new TrueFalse(R.string.question_2, true),
             new TrueFalse(R.string.question_3, true),
@@ -37,12 +37,12 @@ public class MainActivity extends Activity {
             new TrueFalse(R.string.question_10, true),
             new TrueFalse(R.string.question_11, false),
             new TrueFalse(R.string.question_12, false),
-            new TrueFalse(R.string.question_13,true)
+            new TrueFalse(R.string.question_13, true)
     };
 
 
     // TODO: Declare constants here
-    final int PROGRESS_BAR_INCREMENT =(int) Math.ceil(100.0 / mQuestionBank.length);
+    final int PROGRESS_BAR_INCREMENT = (int) Math.ceil(100.0 / mQuestionBank.length);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +51,9 @@ public class MainActivity extends Activity {
 
         mTrueButton = findViewById(R.id.true_button);
         mFalseButton = findViewById(R.id.false_button);
-        mQuestionTextView= findViewById(R.id.question_text_view);
+        mQuestionTextView = findViewById(R.id.question_text_view);
         mScoreTextView = findViewById(R.id.score);
-        mProgressBar=findViewById(R.id.progress_bar);
+        mProgressBar = findViewById(R.id.progress_bar);
 
 
         // Restores the 'state' of the app upon screen rotation:
@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
             mIndex = 0;
         }
 
-        mQuestion= mQuestionBank[mIndex].getQuestionId();
+        mQuestion = mQuestionBank[mIndex].getQuestionId();
         mQuestionTextView.setText(mQuestion);
 
 
@@ -90,10 +90,10 @@ public class MainActivity extends Activity {
 
     }
 
-    private void updateQuestion(){
-        mIndex=(mIndex+1) % mQuestionBank.length;
+    private void updateQuestion() {
+        mIndex = (mIndex + 1) % mQuestionBank.length;
 
-        if(mIndex == 0){
+        if (mIndex == 0) {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle("Game Over");
             alert.setCancelable(false);
@@ -106,30 +106,27 @@ public class MainActivity extends Activity {
             });
             alert.show();
         }
-        mQuestion=mQuestionBank[mIndex].getQuestionId();
+        mQuestion = mQuestionBank[mIndex].getQuestionId();
         mQuestionTextView.setText(mQuestion);
         mProgressBar.incrementProgressBy(PROGRESS_BAR_INCREMENT);
 
     }
 
-    private void checkAnswer(boolean userSelection){
+    private void checkAnswer(boolean userSelection) {
         boolean correctAnswer = mQuestionBank[mIndex].isAnswer();
-        if (userSelection == correctAnswer){
+        if (userSelection == correctAnswer) {
             Toast.makeText(this, R.string.correct_toast, Toast.LENGTH_SHORT).show();
-            mScore = mScore+1;
-        }else{
+            mScore = mScore + 1;
+        } else {
             Toast.makeText(this, R.string.incorrect_toast, Toast.LENGTH_SHORT).show();
-            }
-
-
-
+        }
     }
+
     // This callback is received when the screen is rotated so we can save the 'state'
     // of the app in a 'bundle'.
     @Override
-    public void onSaveInstanceState(Bundle outState){
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         outState.putInt("ScoreKey", mScore);
         outState.putInt("IndexKey", mIndex);
     }
